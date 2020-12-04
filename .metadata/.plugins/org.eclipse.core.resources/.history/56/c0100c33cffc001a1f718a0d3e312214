@@ -1,0 +1,23 @@
+import java.util.Scanner;
+
+public class Game {
+	
+	private Scanner input;
+	
+	public Game() {
+		
+		this.input = new Scanner(System.in);
+		
+		this.init();
+	}
+	
+	private void init() {
+		
+		System.out.println("Init!");
+	}
+	
+	public void startGame() {
+		
+		System.out.println("가위바위보 게이입니다. 가위, 바위, 보 중에서 입력하세요.");
+	}
+}

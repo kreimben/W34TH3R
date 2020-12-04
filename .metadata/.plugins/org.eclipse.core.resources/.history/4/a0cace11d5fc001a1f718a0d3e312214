@@ -1,0 +1,29 @@
+import java.util.Scanner;
+
+public class Game {
+
+	public Game() {
+
+		this.input = new Scanner(System.in);
+
+		this.init();
+	}
+
+	private Scanner input;
+	private int turnCount;
+
+	enum Gamer { 
+		영희, 
+		철수 
+	}
+
+	private void init() {
+
+		System.out.println("Init!");
+	}
+
+	public void startGame() {
+
+		System.out.println("가위바위보 게임입니다. 가위, 바위, 보 중에서 입력하세요.");
+	}
+}

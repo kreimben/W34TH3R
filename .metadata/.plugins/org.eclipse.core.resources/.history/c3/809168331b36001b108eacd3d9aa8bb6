@@ -1,0 +1,37 @@
+package W34TH3R;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class WTWindow extends JFrame {
+
+	public WTWindow() {
+		
+		// System configuration.
+		this.setTitle("W34TH3R // 실시간 날씨 어플리케이션");
+		
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		this.setSize(1024, 786);
+		
+		this.setResizable(true);
+		
+		this.setVisible(true);
+		
+		this.setLocationRelativeTo(null);
+		
+		// Custom configuration.
+		this.add(this.configureCurrentWeatherLabel());
+	}
+	
+	private JLabel configureCurrentWeatherLabel() {
+		
+		JLabel label = new JLabel("현재 날씨");
+		
+		label.setOpaque(true);
+
+		label.getHorizontalAlignment();
+		
+		return label;
+	}
+}

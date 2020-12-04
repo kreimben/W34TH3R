@@ -1,0 +1,12 @@
+public class Submission {
+	
+	public static void main(String[] args) {
+		
+		System.out.print("Hello, I'm Kreimben!");
+	}
+	
+	private void getReadyInit() {
+		
+		System.out.print("I'm in the private method!");
+	}
+}

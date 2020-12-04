@@ -1,0 +1,9 @@
+package W34TH3R;
+
+public class ApplicationMain {
+
+	public static void main() {
+		 
+		new AKWindow();
+	}
+}

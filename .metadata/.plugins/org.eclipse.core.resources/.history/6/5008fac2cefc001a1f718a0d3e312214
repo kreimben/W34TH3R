@@ -1,0 +1,17 @@
+public class Game {
+	
+	public Game() {
+		
+		
+	}
+	
+	private void init() {
+		
+		
+	}
+	
+	public void startGame() {
+		
+		
+	}
+}

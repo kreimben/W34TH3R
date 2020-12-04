@@ -1,0 +1,12 @@
+public class Submission {
+	
+	public static void main(String[] args) {
+		
+		Submission.getReadyInit();
+	}
+	
+	private void getReadyInit() {
+		
+		
+	}
+}
