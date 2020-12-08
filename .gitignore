@@ -1,4 +1,3 @@
 .DS_Store
 out/
-
-src/com/Kreimben/WTNetworkAPIKey.java
+WTNetworkAPIKey.java
