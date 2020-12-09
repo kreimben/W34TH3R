@@ -2,6 +2,10 @@ package com.Kreimben;
 
 public class MainApplication {
     public static void main(String[] argv) {
-        new WTFrameController();
+        var frame = new WTFrameController();
+
+        var thread = new Thread(frame);
+
+        thread.run();
     }
 }
