@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import org.json.simple.*;
 
-public class WTFrameController extends JFrame implements Runnable {
+public class WTMainViewController extends JFrame implements Runnable {
 
     private JLabel currentWeather; // Immutable label
     private JLabel weatherLabel; // Mutable label
@@ -22,7 +22,7 @@ public class WTFrameController extends JFrame implements Runnable {
         init();
     }
 
-    public WTFrameController() {
+    public WTMainViewController() {
         super();
     }
 
