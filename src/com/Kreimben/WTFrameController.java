@@ -3,7 +3,6 @@ package com.Kreimben;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.io.*;
 import java.util.HashMap;
 
 import org.json.simple.*;
@@ -55,7 +54,7 @@ public class WTFrameController extends JFrame implements Runnable {
         System.out.format("Saved city name is: %s\n", cityName);
 
         try {
-            var result = WTNetworkManager.getInstance().getWeather(cityName);
+            var result = WTNetworkManager.getInstance().fetchWeather(cityName);
 
             cityName = result.get("name").toString();
             var weatherObject = (JSONObject)( (JSONArray)result.get("weather") ).get(0);

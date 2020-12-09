@@ -14,7 +14,7 @@ public class WTNetworkManager {
         return instance;
     }
 
-    public JSONObject getWeather(String cityName) throws Exception {
+    public JSONObject fetchWeather(String cityName) throws Exception {
         var urlString = "https://api.openweathermap.org/data/2.5/weather" +
                 "?" +
                 "q=" + cityName +
