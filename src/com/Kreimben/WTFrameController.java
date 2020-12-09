@@ -62,11 +62,19 @@ public class WTFrameController extends JFrame implements Runnable {
         }
         catch (Exception e) { System.out.println(e.getMessage()); }
         finally {
-            var result = new HashMap<String, String>();
-            result.put("cityName", cityName);
-            result.put("description", description);
+            if (cityName != null) {
+                var result = new HashMap<String, String>();
+                result.put("cityName", cityName);
+                result.put("description", description);
 
-            return result;
+                return result;
+            } else {
+                var result = new HashMap<String, String>();
+                result.put("cityName", "위치를 설정해 주세요!");
+                result.put("description", "서버로 부터 불러오는 중...");
+
+                return result;
+            }
         }
     }
 
