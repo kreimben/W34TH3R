@@ -3,8 +3,8 @@ package com.Kreimben;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.io.*;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.json.simple.*;
 
@@ -17,6 +17,8 @@ public class WTFrameController extends JFrame implements Runnable {
     private JLabel locationLabel; // Mutable label
     private JButton aboutThisAppButton;
 
+    private float alignment = JFrame.CENTER_ALIGNMENT;
+
     public void run() {
         init();
     }
@@ -27,34 +29,33 @@ public class WTFrameController extends JFrame implements Runnable {
 
     private void init() {
 
-        var mSize = new Dimension(500, 350);
-        setMinimumSize(mSize);
-        setPreferredSize(mSize);
-        setMaximumSize(mSize);
+        var frameSize = new Dimension(500, 350);
 
         setTitle("W34TH3R // 실시간 날씨 어플리케이션");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        getContentPane().setMinimumSize(mSize);
-        getContentPane().setPreferredSize(mSize);
+        setMinimumSize(frameSize);
+        setMaximumSize(frameSize);
 
-        setVisible(true);
         setLocationRelativeTo(null);
 
-        this.setBasicComponent( () -> {
-            //return this.fetchWeatherData();
-            return new HashMap<String, String>();
+        this.setBasicComponent(() -> {
+
+            return this.fetchWeatherData();
         });
     }
 
     private HashMap<String, String> fetchWeatherData() {
 
-        String cityName = null;
+        //String cityName = null;
         String description = null;
 
+        var cityName = WTIOManager.getInstance().getSavedCityName();
+        System.out.format("Saved city name is: %s\n", cityName);
+
         try {
-            var result = WTNetworkManager.getInstance().getWeather("seoul");
+            var result = WTNetworkManager.getInstance().getWeather(cityName);
 
             cityName = result.get("name").toString();
             var weatherObject = (JSONObject)( (JSONArray)result.get("weather") ).get(0);
@@ -84,8 +85,6 @@ public class WTFrameController extends JFrame implements Runnable {
         this.makeAboutThisAppButton();
 
         this.setVisible(true);
-
-        //System.out.format("Locations: %s\n", this.weatherLabel.getAlignmentX());
     }
 
     private void makeCurrentWeather() {
@@ -97,9 +96,12 @@ public class WTFrameController extends JFrame implements Runnable {
         this.currentWeather.setFont(f);
 
         this.currentWeather.setVisible(true);
-        this.currentWeather.setAlignmentX(JFrame.CENTER_ALIGNMENT);
+        this.currentWeather.setAlignmentX(this.alignment);
 
         this.currentWeather.setBorder(new EmptyBorder(24, 0, 0, 0));
+
+        //this.currentWeather.setOpaque(true);
+        //this.currentWeather.setBackground(new Color(255, 0, 0));
 
         getContentPane().add(this.currentWeather);
     }
@@ -113,7 +115,7 @@ public class WTFrameController extends JFrame implements Runnable {
         this.weatherLabel.setFont(f);
 
         this.weatherLabel.setVisible(true);
-        this.weatherLabel.setAlignmentX(JFrame.CENTER_ALIGNMENT);
+        this.weatherLabel.setAlignmentX(this.alignment);
 
         this.weatherLabel.setBorder(new EmptyBorder(24, 0, 0, 0));
 
@@ -128,7 +130,7 @@ public class WTFrameController extends JFrame implements Runnable {
         int height = 80;
         var size = new Dimension(width, height);
         detailPanel.setMaximumSize(size);
-        detailPanel.setAlignmentX((float)0.3);
+        detailPanel.setAlignmentX(this.alignment);
         detailPanel.setOpaque(false);
 
         this.currentLocation = new JLabel("현재 위치");
@@ -141,7 +143,7 @@ public class WTFrameController extends JFrame implements Runnable {
 
         detailPanel.setBorder(new EmptyBorder(32, 0, 0, 0));
 
-        detailPanel.add(currentLocation);
+        detailPanel.add(this.currentLocation);
         detailPanel.add(this.changeLocationButton);
         getContentPane().add(detailPanel);
     }
@@ -155,7 +157,7 @@ public class WTFrameController extends JFrame implements Runnable {
         this.locationLabel.setFont(f);
 
         this.locationLabel.setVisible(true);
-        this.locationLabel.setAlignmentX(JFrame.CENTER_ALIGNMENT);
+        this.locationLabel.setAlignmentX(this.alignment);
 
         this.locationLabel.setBorder(new EmptyBorder(24, 0, 24, 0));
 
@@ -166,14 +168,7 @@ public class WTFrameController extends JFrame implements Runnable {
 
         this.aboutThisAppButton = new JButton("이 어플리케이션에 관하여...");
 
-        this.aboutThisAppButton.setAlignmentX(0.0F);
-
-        //var size = new Dimension(170, 25);
-        //this.aboutThisAppButton.setSize(size);
-        //this.aboutThisAppButton.setPreferredSize(size);
-        //this.aboutThisAppButton.setMinimumSize(size);
-        //this.aboutThisAppButton.setMaximumSize(size);
-        //System.out.format("Button info: %s\n", this.aboutThisAppButton);
+        this.aboutThisAppButton.setAlignmentX(this.alignment);
 
         getContentPane().add(aboutThisAppButton);
     }
