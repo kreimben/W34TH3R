@@ -3,6 +3,8 @@ package com.Kreimben;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 import org.json.simple.*;
@@ -147,6 +149,12 @@ public class WTMainViewController extends JFrame implements Runnable {
         this.currentLocation.setFont(f);
 
         this.changeLocationButton = new JButton("위치 바꾸기");
+        this.changeLocationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new WTSelectCityViewController();
+            }
+        });
 
         detailPanel.setBorder(new EmptyBorder(32, 0, 0, 0));
 
@@ -179,4 +187,6 @@ public class WTMainViewController extends JFrame implements Runnable {
 
         getContentPane().add(aboutThisAppButton);
     }
+
+
 }
