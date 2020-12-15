@@ -43,7 +43,7 @@ public class WTSelectCityViewController extends JFrame {
 
         System.out.format("text field size: %s\n", this.textField.getSize());
         this.textField.setOpaque(true);
-        this.textField.setBackground(new Color(255, 0, 0));
+        //this.textField.setBackground(new Color(255, 0, 0));
 
         this.textField.addKeyListener(new KeyListener() {
             @Override
