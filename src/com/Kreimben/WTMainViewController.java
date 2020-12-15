@@ -30,7 +30,7 @@ public class WTMainViewController extends JFrame implements Runnable {
 
     private void init() {
 
-        var frameSize = new Dimension(500, 350);
+        var frameSize = new Dimension(500, 370);
 
         setTitle("W34TH3R // 실시간 날씨 어플리케이션");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
