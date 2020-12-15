@@ -36,8 +36,8 @@ public class WTMainViewController extends JFrame implements Runnable {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        setMinimumSize(frameSize);
-        setMaximumSize(frameSize);
+        setSize(frameSize);
+        setResizable(false);
 
         setLocationRelativeTo(null);
 
