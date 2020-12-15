@@ -100,17 +100,12 @@ public class WTMainViewController extends JFrame implements Runnable {
 
         this.currentWeather = new JLabel("현재 날씨");
         this.currentWeather.setSize(100, 25);
-
-        var f = new Font("Arial", Font.BOLD, 24);
-        this.currentWeather.setFont(f);
+        this.currentWeather.setFont(this.currentWeather.getFont().deriveFont(25f));
 
         this.currentWeather.setVisible(true);
         this.currentWeather.setAlignmentX(this.alignment);
 
         this.currentWeather.setBorder(new EmptyBorder(24, 0, 0, 0));
-
-        //this.currentWeather.setOpaque(true);
-        //this.currentWeather.setBackground(new Color(255, 0, 0));
 
         getContentPane().add(this.currentWeather);
     }
@@ -119,9 +114,7 @@ public class WTMainViewController extends JFrame implements Runnable {
 
         this.weatherLabel = new JLabel(text);//("서버로부터 데이터 불러오는 중...");
         this.weatherLabel.setSize(100, 25);
-
-        var f = new Font("Arial", Font.BOLD, 32);
-        this.weatherLabel.setFont(f);
+        this.weatherLabel.setFont(this.weatherLabel.getFont().deriveFont(32f));
 
         this.weatherLabel.setVisible(true);
         this.weatherLabel.setAlignmentX(this.alignment);
@@ -145,8 +138,7 @@ public class WTMainViewController extends JFrame implements Runnable {
         this.currentLocation = new JLabel("현재 위치");
         this.currentLocation.setSize(100, 25);
 
-        var f = new Font("Arial", Font.BOLD, 24);
-        this.currentLocation.setFont(f);
+        this.currentLocation.setFont(this.currentLocation.getFont().deriveFont(24f));
 
         this.changeLocationButton = new JButton("위치 바꾸기");
         this.changeLocationButton.addActionListener(new ActionListener() {
@@ -168,8 +160,7 @@ public class WTMainViewController extends JFrame implements Runnable {
         this.locationLabel = new JLabel(text);//("정보 없음");
         this.locationLabel.setSize(100, 25);
 
-        var f = new Font("Arial", Font.BOLD, 32);
-        this.locationLabel.setFont(f);
+        this.locationLabel.setFont(this.locationLabel.getFont().deriveFont(32f));
 
         this.locationLabel.setVisible(true);
         this.locationLabel.setAlignmentX(this.alignment);
@@ -187,6 +178,4 @@ public class WTMainViewController extends JFrame implements Runnable {
 
         getContentPane().add(aboutThisAppButton);
     }
-
-
 }
