@@ -173,6 +173,12 @@ public class WTMainViewController extends JFrame implements Runnable {
     private void makeAboutThisAppButton() {
 
         this.aboutThisAppButton = new JButton("이 어플리케이션에 관하여...");
+        this.aboutThisAppButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                WTAboutThisAppViewController.showThisView(null);
+            }
+        });
 
         this.aboutThisAppButton.setAlignmentX(this.alignment);
 
