@@ -16,9 +16,11 @@ public enum WTColor {
 
     int r, g, b;
 
-    private WTColor(int r, int g, int b) { }
-
-    public Color getColor() {
-        return new Color(r, g, b);
+    private WTColor(int r, int g, int b) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
     }
+
+    public Color getColor() { return new Color(r, g, b); }
 }
