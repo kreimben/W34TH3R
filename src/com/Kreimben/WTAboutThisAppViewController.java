@@ -38,7 +38,7 @@ public class WTAboutThisAppViewController extends JFrame {
         this.setTitle("이 어플리케이션에 관하여");
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         this.setAlwaysOnTop(true);
-        getContentPane().setBackground(new Color(100, 200, 50));
+        getContentPane().setBackground(WTColor.GREEN.getColor());
         this.setLocationRelativeTo(null);
 
         this.addWindowListener(new WindowAdapter() {
