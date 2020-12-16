@@ -15,8 +15,8 @@ public class WTSelectCityViewController extends JFrame {
 
     public WTSelectCityViewController() {
         var size = new Dimension(this.windowWidth, 500);
-        setMinimumSize(size);
-        setMaximumSize(size);
+        setSize(size);
+        setResizable(false);
         setLocationRelativeTo(null);
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
