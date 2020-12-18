@@ -43,6 +43,8 @@ public class WTSelectCityViewController extends JFrame implements Runnable {
         setLocationRelativeTo(null);
         setAlwaysOnTop(true);
 
+        getContentPane().setBackground(WTColor.getRandomColor().getColor());
+
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -59,8 +61,6 @@ public class WTSelectCityViewController extends JFrame implements Runnable {
     public WTSelectCityViewController() { }
 
     private void setBasicComponent(WTCompletion completion) {
-
-        getContentPane().setBackground(WTColor.RED.getColor());
 
         this.makeNoticeLabel();
         this.makeTextField();
@@ -79,6 +79,8 @@ public class WTSelectCityViewController extends JFrame implements Runnable {
         this.noticeLabel.setBorder(new EmptyBorder(24, 0, 0, 0));
 
         this.noticeLabel.setOpaque(false);
+
+        this.noticeLabel.setSize(this.windowWidth, 25);
 
         this.add(noticeLabel);
     }
