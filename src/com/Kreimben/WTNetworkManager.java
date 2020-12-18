@@ -19,7 +19,7 @@ public class WTNetworkManager {
                 "?" +
                 "q=" + cityName +
                 "&" +
-                "appid=" + WTNetworkAPIKey.Key +
+                "appid=" + WTNetworkAPIKey.OpenWeatherApiKey +
                 "&" +
                 "units=" + "metric" +
                 "&" +
@@ -35,6 +35,32 @@ public class WTNetworkManager {
         connection.connect();
 
         //System.out.format("URL is: %s\n", urlString);
+
+        var br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        var result = parseJSONData(br);
+
+        return result;
+    }
+
+    public JSONObject searchCities(String cityName) throws Exception {
+        var urlString = "https://wft-geo-db.p.rapidapi.com/v1/geo/cities" +
+                "?" +
+                "namePrefix=" + cityName + "&" +
+                "sort=" + "name" + "&" +
+                "limit=" + "10";
+        var obj = new URL(urlString);
+        System.out.format("URL is %s\n", urlString);
+
+        var connection = (HttpURLConnection) obj.openConnection();
+
+        connection.setRequestMethod("GET");
+        connection.setConnectTimeout(10 * 1000);
+
+        connection.setRequestProperty("x-rapidapi-key", WTNetworkAPIKey.RapidApiKey);
+        connection.setRequestProperty("x-rapidapi-host", "wft-geo-db.p.rapidapi.com");
+        connection.setRequestProperty("useQueryString", "true");
+
+        connection.connect();
 
         var br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         var result = parseJSONData(br);
