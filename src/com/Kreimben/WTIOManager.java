@@ -18,11 +18,14 @@ public class WTIOManager {
 
         try {
             var file = new File("./conf.txt");
-            var reader = new FileReader(file);
+            var r = new FileReader(file);
 
-            result = reader.getEncoding();
+            var br = new BufferedReader(r);
 
-            reader.close();
+            result = br.readLine();
+
+            br.close();
+            r.close();
         }
         catch (FileNotFoundException e) {
             System.out.println("Configuration file is not found.");
