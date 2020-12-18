@@ -1,5 +1,8 @@
 package com.Kreimben;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -12,6 +15,7 @@ import java.util.Date;
 
 public class WTSelectCityViewController extends JFrame {
 
+    private JLabel noticeLabel;
     private JTextField textField;
     private JList listOfCities;
 
@@ -27,33 +31,42 @@ public class WTSelectCityViewController extends JFrame {
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        this.setBasicComponent(() -> {
-
-        });
+        this.setBasicComponent(null);
     }
 
     private void setBasicComponent(WTCompletion completion) {
 
+        getContentPane().setBackground(WTColor.RED.getColor());
+
+        this.makeNoticeLabel();
         this.makeTextField();
-        this.makeScrollList(this.testFunction(200));
+        this.makeScrollList(null);
 
         this.setVisible(true);
 
         if (completion != null) completion.completion();
     }
 
+    private void makeNoticeLabel() {
+
+        this.noticeLabel = new JLabel("영어로 입력해야 해요. 한국어 적으면 서버가 인식하지 못해요.");
+
+        this.noticeLabel.setBorder(new EmptyBorder(24, 0, 0, 0));
+
+        this.noticeLabel.setOpaque(false);
+
+        this.add(noticeLabel);
+    }
+
     private void makeTextField() {
 
         this.textField = new JTextField();
 
-        this.textField.setBorder(new EmptyBorder(24, 12, 12, 0));
+        this.textField.setBorder(new EmptyBorder(12, 12, 12, 12));
 
-        this.textField.setOpaque(true);
-        this.textField.setBackground(WTColor.TEAL.getColor());
+        this.textField.setOpaque(false);
 
         this.textField.setSize(this.windowWidth, 30);
-
-        System.out.format("Text field's size is %s\n", this.textField.getSize());
 
         this.textField.addKeyListener(new KeyListener() {
             @Override
@@ -61,7 +74,14 @@ public class WTSelectCityViewController extends JFrame {
 
                 if (e.getKeyChar() == '\n') {
 
-                    System.out.format("Key typed: %s\n", e.getKeyChar());
+                    try {
+
+                        var data = WTNetworkManager.getInstance().searchCities(textField.getText());
+                        var convertedData = (JSONArray) data.get("data");
+
+                        setCities(convertedData);
+
+                    } catch (Exception error) { System.out.println("Error occured!"); error.getMessage(); }
                 }
             }
 
@@ -75,18 +95,6 @@ public class WTSelectCityViewController extends JFrame {
         this.add(this.textField);
     }
 
-    private String[] testFunction(int numberOfRepeat) {
-        var result = new String[0];
-
-        for (int i = 0; i < numberOfRepeat; i++) {
-
-            result = Arrays.copyOf(result, result.length + 1);
-            result[result.length - 1] = String.valueOf(i);
-        }
-
-        return result;
-    }
-
     private void makeScrollList(String[] data) {
 
         this.listOfCities = new JList();
@@ -95,18 +103,65 @@ public class WTSelectCityViewController extends JFrame {
         this.listOfCities.setLayoutOrientation(JList.VERTICAL);
         this.listOfCities.setBorder(new EmptyBorder(24, 8, 8, 8));
         this.listOfCities.setVisibleRowCount(25);
-        this.listOfCities.setOpaque(true);
-        this.listOfCities.setBackground(WTColor.BLUE.getColor());
+        this.listOfCities.setOpaque(false);
 
-        this.listOfCities.setListData(data);
+        this.setInitialList();
+
+        this.listOfCities.setBackground(WTColor.GREEN.getColor());
 
         this.listOfCities.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                System.out.format("This is selected as city! %s\n", e.getLastIndex());
+                System.out.format("This is selected as city! %s\n", getSelectedValue());
             }
         });
 
-        this.add(new JScrollPane(this.listOfCities));
+        var scroll = new JScrollPane(this.listOfCities);
+
+        scroll.setOpaque(false);
+        scroll.setBackground(WTColor.GREEN.getColor());
+
+        this.add(scroll);
+    }
+
+    private String getSelectedValue() {
+        var selected = this.listOfCities.getSelectedValue().toString();
+
+        var value = selected.split(" ");
+
+        return value[0];
+    }
+
+    private void setInitialList() {
+        this.listOfCities.setListData(new String[] { "검색해보세요!" } );
+    }
+
+    private void setNoDataList() {
+        this.listOfCities.setListData(new String[] { "서버로부터 데이터를 불러오지 못했습니다.", "다시 검색해보세요!"} );
+    }
+
+    private void setCities(JSONArray json) {
+        var data = new String[0];
+
+        if (json.isEmpty() == true) {
+            System.out.println("There is no data!");
+            this.setNoDataList();
+        } else {
+
+            for (int i = 0; i < json.size(); i++) {
+
+                data = Arrays.copyOf(data, data.length + 1);
+
+                var line = (JSONObject)json.get(i);
+
+                data[data.length - 1] = (String)line.get("city") + " (" + (String)line.get("country") + " / " + (String)line.get("region") + ")";
+            }
+
+            for (var city : data) {
+                System.out.format("city info: %s\n", city);
+            }
+
+            this.listOfCities.setListData(data);
+        }
     }
 }
