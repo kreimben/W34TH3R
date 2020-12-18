@@ -1,10 +1,14 @@
 package com.Kreimben;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import org.json.simple.*;
@@ -13,6 +17,7 @@ public class WTMainViewController extends JFrame implements Runnable {
 
     private JLabel currentWeather; // Immutable label
     private JLabel weatherLabel; // Mutable label
+    private JLabel weatherImage; //Immutable label
     private JLabel currentLocation; // Immutable label
     private JButton changeLocationButton;
     private JLabel locationLabel; // Mutable label
@@ -30,44 +35,67 @@ public class WTMainViewController extends JFrame implements Runnable {
 
     private void init() {
 
-        var frameSize = new Dimension(500, 370);
+        var frameSize = new Dimension(500, 390);
 
         setTitle("W34TH3R // 실시간 날씨 어플리케이션");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+
+        getContentPane().setBackground(WTColor.LIGHT_GRAY.getColor());
 
         setSize(frameSize);
         setResizable(false);
 
         setLocationRelativeTo(null);
 
-        this.setBasicComponent(() -> {
+        this.refreshThisView();
+    }
 
-            return this.fetchWeatherData();
-        });
+    private void setBasicComponent(WTMapCompletion completion) {
+
+        var result = completion.completion();
+
+        var cityName = result.get("cityName");
+        var weather = result.get("description");
+        var icon = result.get("icon");
+
+        this.makeCurrentWeather();
+        if (icon != null) {
+            this.makeWeatherLabelAndImage(weather, icon);
+        } else {
+            this.getContentPane().add(this.makeWeatherLabel(weather));
+        }
+        this.makeCurrentLocationAndButton();
+        this.makeLocationLabel(cityName);
+        this.makeAboutThisAppButton();
+
+        this.setVisible(true);
     }
 
     private HashMap<String, String> fetchWeatherData() {
 
-        //String cityName = null;
         String description = null;
 
-        var cityName = WTIOManager.getInstance().getSavedCityName();
-        System.out.format("Saved city name is: %s\n", cityName);
+        var line = WTIOManager.getInstance().getSavedCityName();
+        var cityName = "";
+        if (line != null) { cityName = line.split(" ")[0]; }
+        var icon = "";
+        System.out.format("Saved city name is: %s\n", line);
 
         try {
             var result = WTNetworkManager.getInstance().fetchWeather(cityName);
 
-            cityName = result.get("name").toString();
             var weatherObject = (JSONObject)( (JSONArray)result.get("weather") ).get(0);
             description = weatherObject.get("description").toString();
+            icon = weatherObject.get("icon").toString();
         }
         catch (Exception e) { System.out.println(e.getMessage()); }
         finally {
-            if (cityName != null) {
+            if (description != null && !icon.isEmpty()) { //cityName != null) {
                 var result = new HashMap<String, String>();
-                result.put("cityName", cityName);
+                result.put("cityName", line);//cityName);
                 result.put("description", description);
+                result.put("icon", icon);
 
                 return result;
             } else {
@@ -78,22 +106,6 @@ public class WTMainViewController extends JFrame implements Runnable {
                 return result;
             }
         }
-    }
-
-    private void setBasicComponent(WTMapCompletion completion) {
-
-        var result = completion.completion();
-
-        var cityName = result.get("cityName");
-        var weather = result.get("description");
-
-        this.makeCurrentWeather();
-        this.makeWeatherLabel(weather);
-        this.makeCurrentLocationAndButton();
-        this.makeLocationLabel(cityName);
-        this.makeAboutThisAppButton();
-
-        this.setVisible(true);
     }
 
     private void makeCurrentWeather() {
@@ -110,18 +122,56 @@ public class WTMainViewController extends JFrame implements Runnable {
         getContentPane().add(this.currentWeather);
     }
 
-    private void makeWeatherLabel(String text) {
+    private void makeWeatherLabelAndImage(String description, String icon) {
 
-        this.weatherLabel = new JLabel(text);//("서버로부터 데이터 불러오는 중...");
-        this.weatherLabel.setSize(100, 25);
-        this.weatherLabel.setFont(this.weatherLabel.getFont().deriveFont(32f));
+        System.out.format("weather description: %s\n", description);
+        System.out.format("icon: %s\n", icon);
 
-        this.weatherLabel.setVisible(true);
-        this.weatherLabel.setAlignmentX(this.alignment);
+        var weatherLabel = makeWeatherLabel(description);
+        var weatherImage = makeWeatherImage(icon);
 
-        this.weatherLabel.setBorder(new EmptyBorder(24, 0, 0, 0));
+        var panel = new JPanel();
 
-        getContentPane().add(this.weatherLabel);
+        panel.setLayout(new FlowLayout());
+        panel.setMaximumSize(new Dimension(500, 100));
+        panel.setAlignmentX(this.alignment);
+        panel.setOpaque(false);
+
+        if (weatherImage != null && weatherLabel != null) {
+            panel.add(weatherLabel);
+            panel.add(weatherImage);
+        } else { System.out.format("weather label: %s\n", weatherImage, weatherLabel); }
+
+        getContentPane().add(panel);
+    }
+
+    private JLabel makeWeatherLabel(String text) {
+
+        var label = new JLabel(text);
+        label.setSize(100, 25);
+        label.setFont(label.getFont().deriveFont(32f));
+
+        label.setVisible(true);
+        label.setAlignmentX(this.alignment);
+
+        label.setBorder(new EmptyBorder(24, 0, 0, 0));
+
+        this.weatherLabel = label;
+        return label;
+    }
+
+    private JLabel makeWeatherImage(String icon) {
+
+        try {
+            BufferedImage image = ImageIO.read(new File("./src/com/Kreimben/weather_icon_images/" + icon + "@2x.png"));
+
+            this.weatherImage = new JLabel(new ImageIcon(image));
+
+        } catch (IOException e) { e.getMessage(); }
+        finally {
+
+            return this.weatherImage;
+        }
     }
 
     private void makeCurrentLocationAndButton() {
@@ -144,7 +194,17 @@ public class WTMainViewController extends JFrame implements Runnable {
         this.changeLocationButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new WTSelectCityViewController();
+
+                var vc = new WTSelectCityViewController();
+
+                var thread = new Thread(vc);
+
+                vc.doAfterClosedThisView = () -> {
+                    getContentPane().removeAll();
+                    refreshThisView();
+                };
+
+                thread.start();
             }
         });
 
@@ -160,7 +220,7 @@ public class WTMainViewController extends JFrame implements Runnable {
         this.locationLabel = new JLabel(text);//("정보 없음");
         this.locationLabel.setSize(100, 25);
 
-        this.locationLabel.setFont(this.locationLabel.getFont().deriveFont(32f));
+        this.locationLabel.setFont(this.locationLabel.getFont().deriveFont(16f));
 
         this.locationLabel.setVisible(true);
         this.locationLabel.setAlignmentX(this.alignment);
@@ -183,5 +243,15 @@ public class WTMainViewController extends JFrame implements Runnable {
         this.aboutThisAppButton.setAlignmentX(this.alignment);
 
         getContentPane().add(aboutThisAppButton);
+    }
+
+    synchronized private void refreshThisView() {
+
+        this.setBasicComponent(() -> {
+
+            return this.fetchWeatherData();
+        });
+
+        this.repaint();
     }
 }

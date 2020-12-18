@@ -10,29 +10,53 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.Date;
 
-public class WTSelectCityViewController extends JFrame {
+public class WTSelectCityViewController extends JFrame implements Runnable {
 
     private JLabel noticeLabel;
     private JTextField textField;
     private JList listOfCities;
+    private JLabel statusLabel;
+
+    private Boolean isAbleToSaveCity = false;
 
     private int windowWidth = 400;
 
-    public WTSelectCityViewController() {
+    public WTCompletion doAfterClosedThisView;
+
+    @Override
+    public void run() {
+
+        init();
+    }
+
+    private void init() {
 
         var size = new Dimension(this.windowWidth, 500);
 
         setSize(size);
         setResizable(false);
         setLocationRelativeTo(null);
+        setAlwaysOnTop(true);
+
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                if (doAfterClosedThisView != null) { doAfterClosedThisView.completion(); }
+            }
+        });
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         this.setBasicComponent(null);
     }
+
+    public WTSelectCityViewController() { }
 
     private void setBasicComponent(WTCompletion completion) {
 
@@ -41,6 +65,7 @@ public class WTSelectCityViewController extends JFrame {
         this.makeNoticeLabel();
         this.makeTextField();
         this.makeScrollList(null);
+        this.makeStatusLabel();
 
         this.setVisible(true);
 
@@ -112,7 +137,16 @@ public class WTSelectCityViewController extends JFrame {
         this.listOfCities.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                System.out.format("This is selected as city! %s\n", getSelectedValue());
+
+                if (isAbleToSaveCity == true) {
+                    var selected = getSelectedValue();
+
+                    System.out.format("This is selected as city! %s\n", selected);
+
+                    WTIOManager.getInstance().makeConfigurationFile(selected);
+
+                    statusLabel.setText("저장 되었습니다.!");
+                }
             }
         });
 
@@ -124,12 +158,17 @@ public class WTSelectCityViewController extends JFrame {
         this.add(scroll);
     }
 
+    private void makeStatusLabel() {
+
+        this.statusLabel = new JLabel();
+
+        this.statusLabel.setOpaque(false);
+
+        this.add(this.statusLabel);
+    }
+
     private String getSelectedValue() {
-        var selected = this.listOfCities.getSelectedValue().toString();
-
-        var value = selected.split(" ");
-
-        return value[0];
+        return this.listOfCities.getSelectedValue().toString();
     }
 
     private void setInitialList() {
@@ -145,8 +184,13 @@ public class WTSelectCityViewController extends JFrame {
 
         if (json.isEmpty() == true) {
             System.out.println("There is no data!");
+
+            this.isAbleToSaveCity = false;
+
             this.setNoDataList();
         } else {
+
+            this.isAbleToSaveCity = true;
 
             for (int i = 0; i < json.size(); i++) {
 
