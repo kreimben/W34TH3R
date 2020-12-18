@@ -1,6 +1,7 @@
 package com.Kreimben;
 
 import java.awt.*;
+import java.util.Random;
 
 public enum WTColor {
 
@@ -24,4 +25,8 @@ public enum WTColor {
     }
 
     public Color getColor() { return new Color(r, g, b); }
+
+    static public WTColor getRandomColor() {
+        return WTColor.values()[new Random().nextInt(WTColor.values().length)];
+    }
 }

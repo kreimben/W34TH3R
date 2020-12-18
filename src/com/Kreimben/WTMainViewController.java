@@ -41,7 +41,7 @@ public class WTMainViewController extends JFrame implements Runnable {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        getContentPane().setBackground(WTColor.LIGHT_GRAY.getColor());
+        getContentPane().setBackground(WTColor.getRandomColor().getColor());
 
         setSize(frameSize);
         setResizable(false);
