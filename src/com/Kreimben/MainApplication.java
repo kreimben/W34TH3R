@@ -6,6 +6,6 @@ public class MainApplication {
 
         var thread = new Thread(frame);
 
-        thread.run();
+        thread.start();
     }
 }
