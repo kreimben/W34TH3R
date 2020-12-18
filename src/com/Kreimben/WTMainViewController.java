@@ -162,16 +162,8 @@ public class WTMainViewController extends JFrame implements Runnable {
 
     private JLabel makeWeatherImage(String icon) {
 
-        try {
-            BufferedImage image = ImageIO.read(new File("./src/com/Kreimben/weather_icon_images/" + icon + "@2x.png"));
-
-            this.weatherImage = new JLabel(new ImageIcon(image));
-
-        } catch (IOException e) { e.getMessage(); }
-        finally {
-
-            return this.weatherImage;
-        }
+        this.weatherImage = new JLabel(WTNetworkManager.getInstance().loadWeatherIcon(icon));
+        return this.weatherImage;
     }
 
     private void makeCurrentLocationAndButton() {

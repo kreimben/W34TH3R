@@ -100,22 +100,11 @@ public class WTAboutThisAppViewController extends JFrame {
 
     private void makeImageLabel(JPanel rootView) {
 
-        //System.out.format("Current working directory is %s\n", System.getProperty("user.dir"));
+        this.myImage = new JLabel(WTNetworkManager.getInstance().loadMyImage());
 
-        try {
-            BufferedImage myPicture = ImageIO.read(new File("./src/com/Kreimben/kreimben_image.jpg"));
-            this.myImage = new JLabel(new ImageIcon(myPicture));
+        this.myImage.setSize(300, 300);
 
-            this.myImage.setSize(300, 300);
-
-            rootView.add(this.myImage);
-        } catch (FileNotFoundException e) {
-            System.out.println("Image not found!");
-            e.getStackTrace();
-        } catch (IOException e) {
-            System.out.println("IOException e");
-            e.getStackTrace();
-        }
+        rootView.add(this.myImage);
     }
 
     private void makeIntroduceLabel(JPanel rootView) {

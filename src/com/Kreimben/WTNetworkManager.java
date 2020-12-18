@@ -7,6 +7,9 @@ import org.json.simple.*;
 import org.json.simple.parser.*;
 import org.json.simple.parser.JSONParser;
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
+
 public class WTNetworkManager {
     private static WTNetworkManager instance;
     public static WTNetworkManager getInstance() {
@@ -66,6 +69,37 @@ public class WTNetworkManager {
         var result = parseJSONData(br);
 
         return result;
+    }
+
+    public ImageIcon loadMyImage() {
+        ImageIcon image = null;
+
+        try {
+            var url = new URL("https://i.imgur.com/XstQFjt.jpg");
+            var bi = ImageIO.read(url);
+
+            image = new ImageIcon(bi);
+        }
+        catch (IOException e) { e.getMessage(); }
+        finally {
+            return image;
+        }
+    }
+
+    public ImageIcon loadWeatherIcon(String icon) {
+
+        ImageIcon image = null;
+
+        try {
+            var url = new URL("http://openweathermap.org/img/wn/" + icon + "@2x.png");
+            var bi = ImageIO.read(url);
+
+            image = new ImageIcon(bi);
+        }
+        catch (IOException e) { e.getMessage(); }
+        finally {
+            return image;
+        }
     }
 
     private WTNetworkManager() { }
