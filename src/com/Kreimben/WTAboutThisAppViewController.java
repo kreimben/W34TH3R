@@ -132,8 +132,6 @@ public class WTAboutThisAppViewController extends JFrame {
                 .append("간단하지만 기능에 충실하며, 무엇보다 잘 작동됩니다!")
                 .toString();
 
-        System.out.println(introduce);
-
         this.introduceLabel = new JTextArea(introduce);
         this.introduceLabel.setEditable(false);
         this.introduceLabel.setOpaque(false);
