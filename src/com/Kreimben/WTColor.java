@@ -12,6 +12,7 @@ public enum WTColor {
     PURPLE(175, 82, 222),
     RED(255, 59, 48),
     TEAL(90, 200, 250),
+    LIGHT_GRAY(151,151,151),
     YELLOW(255, 204, 0);
 
     int r, g, b;
