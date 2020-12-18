@@ -80,7 +80,7 @@ public class WTMainViewController extends JFrame implements Runnable {
         }
     }
 
-    private void setBasicComponent(WTCompletion completion) {
+    private void setBasicComponent(WTMapCompletion completion) {
 
         var result = completion.completion();
 
